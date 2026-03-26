@@ -1,0 +1,738 @@
+{
+  "name": "Google Review Agent v0.3",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "87f79f4e-dddd-4859-919c-2a4c24815b3e",
+                    "leftValue": "={{ $json.body.rating }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Positive Review"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.rating }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lte"
+                    },
+                    "id": "037fe29b-879d-42f7-b387-10c383754935"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Negative"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "name": "Split by Rating",
+      "position": [
+        -912,
+        656
+      ],
+      "id": "517e788b-063b-46b3-a08d-2a14e2f2faa2",
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1066685143,
+          "mode": "list",
+          "cachedResultName": "Negative Review (Approved)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit#gid=1066685143"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date ": "={{ $('Webhook').item.json.body.time }}",
+            "Customer Name": "={{ $('Webhook').item.json.body.reviewer }}",
+            "Customer Review": "={{ $('Webhook').item.json.body.review }}",
+            "Response to Customer": "={{ $('Edit Fields').item.json.response }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date ",
+              "displayName": "Date ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Customer Name",
+              "displayName": "Customer Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Customer Review",
+              "displayName": "Customer Review",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Response to Customer",
+              "displayName": "Response to Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "locationDefine": {
+            "values": {}
+          },
+          "useAppend": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        528,
+        684
+      ],
+      "name": "Log Negative Review (Approved)",
+      "id": "465c52fe-8da3-45ad-a8d1-66777aa5fe0a",
+      "typeVersion": 4.7,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n5RzeZ50D3NYeKkZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A customer has left a negative review on our Google Business Profile. Draft a response that acknowledges their experience with genuine empathy, maintains a calm and professional tone, and warmly invites them back for a better experience.\n\n\nReviewer: {{ $json.body.reviewer }}\nRating: {{ $json.body.rating }} / 5\nDate: {{ $json.body.time }}\nReview: {{ $json.body.review }}",
+        "options": {
+          "systemMessage": "=You are a customer experience professional drafting responses to negative Google reviews on behalf of the business. Your objective is to de-escalate tension, show genuine empathy, and protect the reputation of the business through clear and thoughtful communication.\n\nYour response must:\n- Be between 3 and 5 sentences\n- Acknowledge the customer's experience with sincerity\n- Invite the customer back warmly without making promises you cannot guarantee\n- Never open with \"We're sorry to hear\" or \"We apologize for\"\n- Never use dashes or hyphens anywhere in the response\n- Never use placeholder text like [Manager Name] or [Your Name]\n- Never argue with, deflect, or subtly place blame on the customer"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -688,
+        856
+      ],
+      "id": "f71c2cbb-1fa5-4481-9f71-9e695048cb14",
+      "name": "Negative Review Agent",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A customer has left a positive review on our Google Business Profile. Draft a warm, appreciative response that makes them feel personally seen and valued.\n\nReviewer: {{ $json.body.reviewer }}\nRating: {{ $json.body.rating }} / 5\nDate: {{ $json.body.time }}\nReview: {{ $json.body.review }}",
+        "options": {
+          "systemMessage": "=You are a professional customer experience representative responding to positive Google reviews on behalf of the business. Your tone is warm, genuine, and conversational — like the owner speaking directly to a friend.\n\nRules you must follow without exception:\n- Never use dashes (hyphens) anywhere in your response\n- Never open with \"Thank you so much for your review\" or \"We appreciate your feedback\" — these feel templated\n- Never use placeholder text like [Owner Name] or [Your Name]\n- Reference something specific from the review so it feels personal, not generic\n- Stay between 100 and 250 characters\n- Sound like a real person wrote this, not a bot"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -688,
+        352
+      ],
+      "id": "e401944a-dea5-4ae7-a5ad-9bc185bb6608",
+      "name": "Positive Review Agent"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-3.5-sonnet",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -616,
+        576
+      ],
+      "id": "07ebf98a-6697-4ada-97ec-12bc31ae7b9a",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "mvHRARyaM5kC0GwU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -616,
+        1080
+      ],
+      "id": "d589fc7a-3176-43b2-97df-133773f5c715",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "mvHRARyaM5kC0GwU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "robert.green1295@gmail.com",
+        "subject": "[APPROVAL REQUIRED] New Review:",
+        "message": "=Hello Jack,\n\nA new negative review was posted on your Google Business Profile and may require a response.\n\nReview Details\n\nReviewer: {{ $('Webhook').item.json.body.reviewer }}\nRating: {{ $('Webhook').item.json.body.rating }}\nDate: {{ $('Webhook').item.json.body.time }}\n\nCustomer Review:\n\"{{ $('Webhook').item.json.body.review }}\"\n---\n\nSuggested Response:\n\n{{ $json.response }}\n\n---\n\nPlease approve or deny the sending of this message generated by Jim, our AI review responder.\n\nReminder:\n\nResponding quickly to reviews helps maintain your reputation and shows customers that feedback matters.\n\nIf you have any questions or would like to adjust how responses are handled, feel free to shoot me a message.\n",
+        "responseType": "freeText",
+        "options": {
+          "responseFormDescription": "=",
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        732
+      ],
+      "id": "bffb223c-8a97-4110-8d72-89b0e5ac9c15",
+      "name": "Send message and wait for response",
+      "webhookId": "5b613113-4bac-41d9-87ae-5995ac41fb36",
+      "alwaysOutputData": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "neWyZOxX4ScanZ52",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61222e52-9fbe-4f02-9875-2c0049c7c143",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -336,
+        856
+      ],
+      "id": "7e4bdc94-54df-4b80-a95f-9f53aaf966b7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Positive Reviews",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Webhook').item.json.body.time }}",
+            "Customer Name": "={{ $('Webhook').item.json.body.reviewer }}",
+            "Customer Review": "={{ $('Webhook').item.json.body.rating }}",
+            "Response to Customer": "={{ $json.output }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Name",
+              "displayName": "Customer Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Review",
+              "displayName": "Customer Review",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response to Customer",
+              "displayName": "Response to Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -336,
+        456
+      ],
+      "id": "58a3357e-9990-4433-9e21-b55e8f71f3c1",
+      "name": "Log Positive Review",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n5RzeZ50D3NYeKkZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.data.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Approved",
+              "description": "=The human has reviewed the response and is satisfied with it. \nThis includes any message that signals acceptance, agreement, or readiness \nto send — even if brief or informal.\n\nAny message that does NOT contain feedback, edits, or revision requests \nshould be classified here by default.\n\nExample phrases include:\n\"Approved\", \"looks good\", \"good\", \"no changes needed\", \"I like it\", \n\"good to go\", \"send it\", \"yes\", \"perfect\", \"ok\", \"okay\", \"sure\", \n\"go ahead\", \"that works\", \"sounds good\", \"nice\", \"great\""
+            },
+            {
+              "category": "Denied",
+              "description": "=The human wants the response changed before it is sent. This includes \nany message containing feedback, instructions, criticism, suggestions, \nor edits — even if politely or vaguely worded.\n\nIf the message contains ANY request for change, no matter how small, \nclassify it here.\n\nExample phrases include:\n\"remove this\", \"take this out\", \"replace this with\", \"be more concise\", \n\"make it shorter\", \"too long\", \"too formal\", \"rewrite this\", \"change the tone\", \n\"don't mention\", \"fix this\", \"try again\", \"not quite\", \"needs work\", \n\"can you make it\", \"be concise\", \"add something about\""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        732
+      ],
+      "id": "3fd67a29-76d3-4c5d-8df3-cd4b692f4417",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=A human reviewer has rejected the draft below and provided feedback. Revise it accordingly. Your output should only include the official review response, no additional comments.\n\nOriginal review from customer:\n{{ $('Webhook').item.json.body.review }}\n\nPrevious draft (rejected):\n{{ $('Edit Fields').item.json.response }}\n\nReviewer feedback:\n{{ $json.data.text }}",
+        "options": {
+          "systemMessage": "=You are a professional customer experience representative revising a Google Business review response on behalf of the business.\n\nYour revised response must:\n- Directly address the feedback provided by the human reviewer\n- Sound distinctly different in structure and wording from the previous draft\n- Be warm, sincere, and human — never robotic or corporate\n- Never use dashes (hyphens) anywhere in the response\n- Never open with \"We're sorry to hear\" or \"We apologize for\"\n- Never use placeholder text like [Manager Name] or [Your Name]\n- Stay between 3 and 5 sentences\n- Invite the customer back with a warm, specific offer to make things right"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        464,
+        1004
+      ],
+      "id": "80645b88-0cf0-4af6-b6d0-c5cffe409a7e",
+      "name": "Revision Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        472,
+        1228
+      ],
+      "id": "c44ead86-11c9-4716-9b0b-7ce7521acfe9",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "mvHRARyaM5kC0GwU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o",
+          "mode": "list",
+          "cachedResultName": "Untitled spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 204312437,
+          "mode": "list",
+          "cachedResultName": "Negative Review (Rejected)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1qnVCTUD0a2Wif6g-pffIno_gzCQvQd-EbHF7J58Fp4o/edit#gid=204312437"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Recommended Change": "={{ $json.data.text }}",
+            "Response to Customer": "={{ $('Negative Review Agent').item.json.output }}",
+            "Customer Name": "={{ $('Webhook').item.json.body.reviewer }}",
+            "Customer Review": "={{ $('Webhook').item.json.body.review }}",
+            "Date ": "={{ $('Webhook').item.json.body.time }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date ",
+              "displayName": "Date ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Name",
+              "displayName": "Customer Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Customer Review",
+              "displayName": "Customer Review",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Response to Customer",
+              "displayName": "Response to Customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Recommended Change",
+              "displayName": "Recommended Change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        600,
+        1228
+      ],
+      "id": "44b9b87b-20dd-434e-9e4d-9374cf208f77",
+      "name": "Logs Negative Review (Rejected)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "n5RzeZ50D3NYeKkZ",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        184,
+        956
+      ],
+      "id": "df172d0f-87e1-438c-81db-b7ea58319364",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "mvHRARyaM5kC0GwU",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "94b54793-1143-419b-b7f5-cf85e541c361",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1136,
+        656
+      ],
+      "id": "261710be-2bb9-41f1-bab8-77254e9caf04",
+      "name": "Webhook",
+      "webhookId": "94b54793-1143-419b-b7f5-cf85e541c361"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Split by Rating": {
+      "main": [
+        [
+          {
+            "node": "Positive Review Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Negative Review Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Negative Review Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Positive Review Agent": {
+      "main": [
+        [
+          {
+            "node": "Log Positive Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Positive Review Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Negative Review Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "Log Negative Review (Approved)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Revision Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Revision Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Revision Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Logs Negative Review (Rejected)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Revision Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Split by Rating",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "f647cd41-4619-4100-a673-d717723a97b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bc52a782c5ff6557782de50397354b618888d5105091f91f804f057444f5ed1f"
+  },
+  "id": "xa-pBCjGOHYPJzeJnWuMb",
+  "tags": []
+}
