@@ -111,22 +111,22 @@ mindmap
       n8n
       Make
       Zapier
-    Voice AI
-      Vapi
-      Twilio Voice
-    Messaging
-      Twilio WhatsApp
-      Telegram Bot API
     AI / LLMs
       OpenAI GPT-4o
       OpenAI Vision
+    Productivity
+      Google Calendar
+      Gmail
     CRM & Data
       HubSpot
       Airtable
       Google Sheets
-    Productivity
-      Gmail
-      Google Calendar
+    Messaging
+      Twilio WhatsApp
+      Telegram Bot API
+    Voice AI
+      Vapi
+      Twilio Voice
     Backend
       Django
       Webhooks
