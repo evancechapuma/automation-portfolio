@@ -104,33 +104,7 @@ A complete event management pipeline over WhatsApp. Ingests event details from a
 
 ## Tech Stack Overview
 
-```mermaid
-mindmap
-  root((Automation Stack))
-    Orchestration
-      n8n
-      Make
-      Zapier
-    AI / LLMs
-      OpenAI GPT-4o
-      OpenAI Vision
-    Productivity
-      Google Calendar
-      Gmail
-    CRM & Data
-      HubSpot
-      Airtable
-      Google Sheets
-    Messaging
-      Twilio WhatsApp
-      Telegram Bot API
-    Voice AI
-      Vapi
-      Twilio Voice
-    Backend
-      Django
-      Webhooks
-```
+![Tech Stack](./assets/tech-stack.svg)
 
 ---
 
