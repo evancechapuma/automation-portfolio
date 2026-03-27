@@ -128,6 +128,12 @@ See [.env.example](.env.example) for placeholder values.
 
 ---
 
+## Workflow Preview
+
+![Workflow Preview](./screenshots/googleReviewAgent.png)
+
+---
+
 ## Key Design Decisions
 
 **Why a multi-agent architecture instead of a single prompt?**
