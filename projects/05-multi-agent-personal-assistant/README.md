@@ -191,6 +191,11 @@ See [.env.example](.env.example) for placeholder values.
 
 ---
 
+## Workflow Preview
+![Workflow Preview](./screenshots/personalAssistant.png)
+
+---
+
 ## Key Design Decisions
 
 **Why Telegram as the command interface?**
