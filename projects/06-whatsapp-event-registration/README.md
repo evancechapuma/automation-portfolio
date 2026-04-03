@@ -210,6 +210,35 @@ n8n's Scheduled Trigger node runs daily and calculates the days until each event
 
 ---
 
+## Screenshots
+
+A gallery of key workflow screens and n8n nodes from this project. Click any image to view the full-size screenshot.
+
+<p align="center">
+   <a href="screenshots/Intent.png"><img src="screenshots/Intent.png" alt="Intent" width="240"/></a>
+   <a href="screenshots/eventInquiry.png"><img src="screenshots/eventInquiry.png" alt="Event inquiry" width="240"/></a>
+   <a href="screenshots/eventSetup.png"><img src="screenshots/eventSetup.png" alt="Event setup" width="240"/></a>
+</p>
+
+<p align="center">
+   <a href="screenshots/selfRegistration.png"><img src="screenshots/selfRegistration.png" alt="Self registration" width="240"/></a>
+   <a href="screenshots/groupRegistration.png"><img src="screenshots/groupRegistration.png" alt="Group registration" width="240"/></a>
+   <a href="screenshots/paymentVerification.png"><img src="screenshots/paymentVerification.png" alt="Payment verification" width="240"/></a>
+</p>
+
+<p align="center">
+   <a href="screenshots/busAssignment.png"><img src="screenshots/busAssignment.png" alt="Bus assignment" width="240"/></a>
+   <a href="screenshots/reminders.png"><img src="screenshots/reminders.png" alt="Reminders" width="240"/></a>
+   <a href="screenshots/adminStats.png"><img src="screenshots/adminStats.png" alt="Admin stats" width="240"/></a>
+</p>
+
+<p align="center">
+   <a href="screenshots/messageHandler.png"><img src="screenshots/messageHandler.png" alt="Message handler" width="240"/></a>
+   <a href="screenshots/statusChecker.png"><img src="screenshots/statusChecker.png" alt="Status checker" width="240"/></a>
+   <a href="screenshots/sendHelper.png"><img src="screenshots/sendHelper.png" alt="Send helper" width="240"/></a>
+</p>
+
+
 ## License
 
 MIT — see [LICENSE](../../LICENSE) for details.
