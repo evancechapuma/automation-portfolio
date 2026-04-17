@@ -118,7 +118,7 @@ An 8-workflow autonomous receptionist stack for law firms. An AI triage agent cl
 
 A single n8n workflow that delivers an automated weekly business intelligence report to a solo acupuncture practitioner every Monday morning. Three Airtable tables (Business Tracker, Ads Tracker, Social Posts) are fetched in parallel via a fan-out/merge pattern. A JavaScript Code node handles all date-range filtering and KPI aggregation — revenue, clients, hours worked, revenue per hour, ad spend by channel, and social posts by platform — with week-over-week comparisons. KPI data is passed to Claude Sonnet via OpenRouter, which writes 3–5 specific, data-driven business insights. A second Code node renders a fully branded HTML email. Smart alerting fires a separate email when revenue drops sharply, data gaps are detected, or performance falls below benchmarks. A weekly snapshot is also written back to Airtable for historical tracking.
 
-**Impact:** Lisa opens her inbox every Monday to a complete picture of her practice — no spreadsheets, no manual number-pulling, no analyst.
+**Impact:** The practitioner opens her inbox every Monday to a complete picture of her practice — no spreadsheets, no manual number-pulling, no analyst.
 
 [View project →](./projects/08-hackensack-weekly-kpi/)
 

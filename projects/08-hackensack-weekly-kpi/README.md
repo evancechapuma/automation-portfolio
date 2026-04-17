@@ -12,7 +12,7 @@
 
 ## Overview
 
-This workflow runs every Monday at 8 AM Eastern and delivers Lisa Mascall (Hackensack Wellness Practice) a complete picture of her business for the past 7 days — revenue, clients, hours, ad spend, and social media activity — with week-over-week comparisons, AI-written insights, and automatic alerts when something needs attention.
+This workflow runs every Monday at 8 AM Eastern and delivers the practice owner a complete picture of her business for the past 7 days — revenue, clients, hours, ad spend, and social media activity — with week-over-week comparisons, AI-written insights, and automatic alerts when something needs attention.
 
 All data lives in her existing Airtable base. No new tools, no dashboards to log into. The report arrives in her inbox.
 
@@ -27,7 +27,7 @@ Solo health and wellness practitioners who track their business data in Airtable
 Solo practitioners spend time manually pulling numbers from spreadsheets, calculating week-over-week changes, and trying to spot trends — time that should be spent with clients. Most give up and fly blind.
 
 **Result:**
-Every Monday, Lisa opens her inbox to a full business summary: revenue vs. last week, clients seen, revenue per hour, ad spend by channel, social posts by platform, AI-generated insights specific to her numbers, and flagged alerts if anything looks off.
+Every Monday, the practice owner opens her inbox to a full business summary: revenue vs. last week, clients seen, revenue per hour, ad spend by channel, social posts by platform, AI-generated insights specific to her numbers, and flagged alerts if anything looks off.
 
 ---
 
