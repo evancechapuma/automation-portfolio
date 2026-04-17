@@ -180,7 +180,7 @@ Send a POST request to your inbound webhook:
 POST /webhook/inbound
 {
   "channel": "email",
-  "message": "Hi, I need legal help with a divorce case.",
+  "message": "Hi, I need legal help with a business contract dispute.",
   "callerName": "Test Client",
   "callerEmail": "test@example.com",
   "callerPhone": "+1234567890",
