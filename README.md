@@ -39,6 +39,7 @@ I don't just connect APIs. I design systems that handle edge cases, fail gracefu
 | 06 | [WhatsApp Event Registration System](#06-whatsapp-event-registration-system) | End-to-end event registration via WhatsApp: PDF ingestion, payment verification, seat assignment | n8n · Airtable · Twilio · OpenAI Vision | [→](./projects/06-whatsapp-event-registration/) |
 | 07 | [AI Law Firm Receptionist](#07-ai-law-firm-receptionist) | 8-workflow autonomous receptionist — triage, intake, scheduling, conflict checks, billing, documents | n8n · Claude · Clio · Google Calendar · Zoom · Gmail · Slack | [→](./projects/07-law-firm-receptionist/) |
 | 08 | [Weekly KPI Summary — Wellness Practice](#08-weekly-kpi-summary--wellness-practice) | Automated weekly business report — parallel Airtable fetching, JS KPI calculation, AI insights, branded HTML email | n8n · Airtable · Claude Sonnet · Gmail | [→](./projects/08-hackensack-weekly-kpi/) |
+| 09 | [Real Estate — Transaction Launch](#09-real-estate--transaction-launch) | 27-node workflow that fires when a deal is marked Won — AI generates the full client project plan, creates Drive folders, seeds ClickUp lists and tasks, sends branded emails, and posts a Slack alert | n8n · Claude Sonnet · ClickUp · Google Drive · Gmail · Slack | [→](./projects/09-real-estate-transaction-launch/) |
 
 ---
 
@@ -114,6 +115,16 @@ An 8-workflow autonomous receptionist stack for law firms. An AI triage agent cl
 
 ---
 
+### 09 — Real Estate — Transaction Launch
+
+A 27-node n8n workflow that fires the moment a real estate deal is marked **Won** in ClickUp. A Claude Sonnet AI agent receives the full ClickUp task and generates a complete structured project plan — client folder name, 5 Drive subfolder names, a 3-section ClickUp checklist with tasks and due dates, a branded client welcome email, an internal project brief, and a Slack message. The workflow then executes that plan across four platforms in parallel: Google Drive folders and subfolders, ClickUp project board with lists and seeded tasks, a conditional client email (guarded for missing addresses), an internal brief with a live Drive link, and a Slack team alert. Full idempotency on re-runs — no duplicate folders or lists regardless of how many times the workflow fires for the same client.
+
+**Impact:** A won deal goes from CRM status change to fully provisioned client project in under 60 seconds — no manual folder creation, no copy-pasting task templates, no missed emails.
+
+[View project →](./projects/09-real-estate-transaction-launch/)
+
+---
+
 ### 08 — Weekly KPI Summary — Wellness Practice
 
 A single n8n workflow that delivers an automated weekly business intelligence report to a solo acupuncture practitioner every Monday morning. Three Airtable tables (Business Tracker, Ads Tracker, Social Posts) are fetched in parallel via a fan-out/merge pattern. A JavaScript Code node handles all date-range filtering and KPI aggregation — revenue, clients, hours worked, revenue per hour, ad spend by channel, and social posts by platform — with week-over-week comparisons. KPI data is passed to Claude Sonnet via OpenRouter, which writes 3–5 specific, data-driven business insights. A second Code node renders a fully branded HTML email. Smart alerting fires a separate email when revenue drops sharply, data gaps are detected, or performance falls below benchmarks. A weekly snapshot is also written back to Airtable for historical tracking.
@@ -142,7 +153,8 @@ automation-portfolio/
 │   ├── 05-multi-agent-personal-assistant/
 │   ├── 06-whatsapp-event-registration/
 │   ├── 07-law-firm-receptionist/
-│   └── 08-hackensack-weekly-kpi/
+│   ├── 08-hackensack-weekly-kpi/
+│   └── 09-real-estate-transaction-launch/
 ├── templates/
 │   └── workflow-readme-template.md
 ├── .github/
