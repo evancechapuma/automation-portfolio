@@ -39,7 +39,7 @@ I don't just connect APIs. I design systems that handle edge cases, fail gracefu
 | 06 | [WhatsApp Event Registration System](#06-whatsapp-event-registration-system) | End-to-end event registration via WhatsApp: PDF ingestion, payment verification, seat assignment | n8n · Airtable · Twilio · OpenAI Vision | [→](./projects/06-whatsapp-event-registration/) |
 | 07 | [AI Law Firm Receptionist](#07-ai-law-firm-receptionist) | 8-workflow autonomous receptionist — triage, intake, scheduling, conflict checks, billing, documents | n8n · Claude · Clio · Google Calendar · Zoom · Gmail · Slack | [→](./projects/07-law-firm-receptionist/) |
 | 08 | [Weekly KPI Summary — Wellness Practice](#08-weekly-kpi-summary--wellness-practice) | Automated weekly business report — parallel Airtable fetching, JS KPI calculation, AI insights, branded HTML email | n8n · Airtable · Claude Sonnet · Gmail | [→](./projects/08-hackensack-weekly-kpi/) |
-| 09 | [Real Estate — Transaction Launch](#09-real-estate--transaction-launch) | 27-node workflow that fires when a deal is marked Won — AI generates the full client project plan, creates Drive folders, seeds ClickUp lists and tasks, sends branded emails, and posts a Slack alert | n8n · Claude Sonnet · ClickUp · Google Drive · Gmail · Slack | [→](./projects/09-real-estate-transaction-launch/) |
+| 09 | [Real Estate — Lead-to-Close Automation](#09-real-estate--lead-to-close-automation) | Two-workflow pipeline: W1 AI-qualifies inbound leads and routes them to ClickUp, books discovery calls, and alerts the agent; W2 fires when a deal is Won and provisions the full client project across Drive, ClickUp, Gmail, and Slack in under 60 seconds | n8n · Claude Opus · Claude Sonnet · ClickUp · Google Drive · Google Calendar · Gmail · Slack | [→](./projects/09-real-estate-lead-to-close/) |
 
 ---
 
@@ -115,13 +115,17 @@ An 8-workflow autonomous receptionist stack for law firms. An AI triage agent cl
 
 ---
 
-### 09 — Real Estate — Transaction Launch
+### 09 — Real Estate — Lead-to-Close Automation
 
-A 27-node n8n workflow that fires the moment a real estate deal is marked **Won** in ClickUp. A Claude Sonnet AI agent receives the full ClickUp task and generates a complete structured project plan — client folder name, 5 Drive subfolder names, a 3-section ClickUp checklist with tasks and due dates, a branded client welcome email, an internal project brief, and a Slack message. The workflow then executes that plan across four platforms in parallel: Google Drive folders and subfolders, ClickUp project board with lists and seeded tasks, a conditional client email (guarded for missing addresses), an internal brief with a live Drive link, and a Slack team alert. Full idempotency on re-runs — no duplicate folders or lists regardless of how many times the workflow fires for the same client.
+A two-workflow n8n system covering the full real estate pipeline from first inquiry to closed deal.
 
-**Impact:** A won deal goes from CRM status change to fully provisioned client project in under 60 seconds — no manual folder creation, no copy-pasting task templates, no missed emails.
+**W1 — Lead Intake & Qualification (11 nodes):** An inbound webhook receives raw lead data from any capture form. A single Claude Opus 4.5 agent normalises the data, scores the lead 0–100, and generates all downstream content in one call. Qualified leads (score ≥ 70) get a high-priority ClickUp task, an AI-written comment, a branded HTML welcome email, a 30-minute Google Calendar discovery call booked for the next business day, and a Slack agent alert. Nurture leads get a normal-priority ClickUp task due in 14 days and a value-first follow-up email.
 
-[View project →](./projects/09-real-estate-transaction-launch/)
+**W2 — Transaction Launch (27 nodes):** Fires the moment a deal is marked Won in ClickUp. Claude Sonnet generates a complete structured project plan — Drive folder name, 5 subfolder names, a 3-section ClickUp board with tasks and due dates, a branded client welcome email, an internal project brief, and a Slack message. The workflow executes that plan in parallel: Google Drive folders and subfolders, ClickUp board with lists and seeded tasks, conditional client email (guarded for missing addresses), internal brief with a live Drive link, and Slack team alert. Full idempotency on re-runs — no duplicate folders or lists regardless of how many times the workflow fires.
+
+**Impact:** A lead goes from form submission to CRM-routed + calendar-booked in seconds. A won deal goes from status change to fully provisioned client project in under 60 seconds — no manual work at either end of the pipeline.
+
+[View project →](./projects/09-real-estate-lead-to-close/)
 
 ---
 
@@ -154,7 +158,7 @@ automation-portfolio/
 │   ├── 06-whatsapp-event-registration/
 │   ├── 07-law-firm-receptionist/
 │   ├── 08-hackensack-weekly-kpi/
-│   └── 09-real-estate-transaction-launch/
+│   └── 09-real-estate-lead-to-close/
 ├── templates/
 │   └── workflow-readme-template.md
 ├── .github/
